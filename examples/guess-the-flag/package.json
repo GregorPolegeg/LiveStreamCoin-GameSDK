@@ -1,0 +1,25 @@
+{
+  "name": "guess-the-flag",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Guess the Flag for VIBES DMs and group chats.",
+  "scripts": {
+    "dev": "vibes-games dev",
+    "build": "vibes-games build",
+    "check": "vibes-games check",
+    "test": "vibes-games test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@vibes/games": "0.1.0",
+    "@vibes/games-logic": "0.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.9.0",
+    "vibes-games": "0.1.0"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

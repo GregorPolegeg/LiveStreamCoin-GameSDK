@@ -1,0 +1,8 @@
+{
+  "name": "Guess the Flag",
+  "slug": "guess-the-flag",
+  "players": { "min": 1, "max": 16 },
+  "modes": ["friendly", "competitive", "practice"],
+  "client": { "entry": "client/main.ts" },
+  "realtime": { "reconnectGraceSec": 45, "maxDurationMin": 30 }
+}

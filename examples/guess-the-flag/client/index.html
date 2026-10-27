@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Guess the Flag</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="banner" class="banner" hidden>Reconnecting…</div>
+
+  <main id="lobby" class="lobby" hidden>
+    <h1>🏳️ Guess the Flag</h1>
+    <p class="sub">Anyone can change these. Everyone sees it live.</p>
+    <section>
+      <h3>How do you answer?</h3>
+      <div class="seg" id="set-mode">
+        <button data-v="cards"><b>🃏 Cards</b><small>pick 1 of 4</small></button>
+        <button data-v="text"><b>⌨️ Type it</b><small>harder, +50 pts</small></button>
+      </div>
+    </section>
+    <section>
+      <h3>Time per flag</h3>
+      <div class="chips" id="set-seconds"></div>
+    </section>
+    <section>
+      <h3>Flags</h3>
+      <div class="chips" id="set-rounds"></div>
+    </section>
+    <section>
+      <h3>Which flags</h3>
+      <div class="chips" id="set-pool"></div>
+    </section>
+    <p id="changed" class="changed">&nbsp;</p>
+    <ul id="lobby-players" class="players"></ul>
+    <button id="start" class="start">Start</button>
+  </main>
+
+  <main id="game" hidden>
+    <header class="top">
+      <span id="round" class="round">1 / 10</span>
+      <span id="me-score" class="me-score">0</span>
+    </header>
+    <div class="bar"><div id="bar-fill" class="bar-fill"></div></div>
+    <div class="flag-card"><img id="flag" alt="Flag" draggable="false"></div>
+    <p id="hint" class="hint">Which country is this?</p>
+    <div id="options" class="options"></div>
+    <form id="type-form" class="type-form" autocomplete="off" hidden>
+      <div class="type-row">
+        <input id="type-input" type="text" placeholder="Type the country…" enterkeyhint="send" spellcheck="false" autocapitalize="off">
+        <button type="submit" id="type-send">OK</button>
+      </div>
+      <ul id="suggest" class="suggest"></ul>
+    </form>
+    <ul id="picks" class="picks" hidden></ul>
+    <ul id="players" class="players"></ul>
+  </main>
+
+  <div id="end" class="end" hidden>
+    <div class="card">
+      <h2 id="end-title"></h2>
+      <ol id="end-list" class="end-list"></ol>
+    </div>
+  </div>
+  <div id="toast" class="toast" hidden></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
