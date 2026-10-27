@@ -1,0 +1,11 @@
+{
+  "name": "@vibes/games-logic",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Types for writing the rules of a VIBES DM game.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "license": "MIT",
+  "scripts": { "build": "tsc -p tsconfig.json", "typecheck": "tsc -p tsconfig.json --noEmit" }
+}

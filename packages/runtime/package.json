@@ -1,0 +1,27 @@
+{
+  "name": "@vibes/game-runtime",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Runs VIBES game logic in an isolated-vm sandbox and keeps multiplayer sessions correct.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node --no-node-snapshot --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "isolated-vm": "7.0.1",
+    "ws": "^8.22.0"
+  },
+  "allowScripts": {
+    "isolated-vm@7.0.1": true
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.2"
+  }
+}
