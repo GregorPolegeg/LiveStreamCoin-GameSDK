@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Tic Tac Toe</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <div id="banner" class="banner" hidden>Reconnecting…</div>
+  <main>
+    <h1 id="status">Connecting…</h1>
+    <p id="timer" class="timer">&nbsp;</p>
+    <div id="board" class="board" role="grid" aria-label="Board"></div>
+    <p id="players" class="players"></p>
+  </main>
+  <div id="end" class="end" hidden>
+    <div class="card">
+      <h2 id="end-title"></h2>
+      <p id="end-text"></p>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

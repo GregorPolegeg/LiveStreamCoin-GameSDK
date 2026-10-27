@@ -1,0 +1,8 @@
+{
+  "name": "Tic Tac Toe",
+  "slug": "tic-tac-toe",
+  "players": { "min": 2, "max": 2 },
+  "modes": ["friendly", "competitive", "practice"],
+  "client": { "entry": "client/main.ts" },
+  "realtime": { "reconnectGraceSec": 45, "turnTimeoutSec": 30, "maxDurationMin": 60 }
+}

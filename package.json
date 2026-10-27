@@ -9,7 +9,7 @@
     "node": ">=22"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build -w @vibes/games-logic -w @vibes/game-runtime -w @vibes/games -w vibes-games -w create-vibes-game",
     "typecheck": "npm run typecheck --workspaces --if-present",
     "test": "npm run test --workspaces --if-present"
   },

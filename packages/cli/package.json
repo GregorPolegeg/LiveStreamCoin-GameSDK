@@ -1,0 +1,27 @@
+{
+  "name": "vibes-games",
+  "version": "0.1.0",
+  "private": true,
+  "description": "VIBES game CLI: dev (local multiplayer), build, check (the automatic release checks), test.",
+  "bin": {
+    "vibes-games": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build && node --no-node-snapshot --import tsx --test test/*.test.ts"
+  },
+  "dependencies": {
+    "@vibes/game-runtime": "0.1.0",
+    "esbuild": "^0.28.2"
+  }
+}

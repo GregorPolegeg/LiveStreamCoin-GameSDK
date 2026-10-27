@@ -71,8 +71,10 @@ export class Sandbox {
       sb.call = await context.global.get('__vibesCall', { reference: true });
       return sb;
     } catch (e) {
+      // Classify before disposing: a disposed isolate would make every error look like "memory".
+      const err = toSandboxError(e, sb.isolate);
       sb.dispose();
-      throw toSandboxError(e, sb.isolate);
+      throw err;
     }
   }
 

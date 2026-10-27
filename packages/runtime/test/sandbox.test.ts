@@ -62,6 +62,13 @@ test('limits: endless loops time out, memory bombs are killed', async () => {
   await expectKind('while (true) {}', 'timeout'); // at load time too
 });
 
+test('a bundle that throws while loading is reported as a crash, with its message', async () => {
+  const code = 'throw new Error("broken bundle")';
+  await assert.rejects(Sandbox.create(code, sha256(code), limits),
+    (e: SandboxError) => e.kind === 'crash' && /broken bundle/.test(e.message));
+  await expectKind('Date.now()', 'crash');
+});
+
 test('a bundle that does not match its hash never runs', async () => {
   await assert.rejects(Sandbox.create(tictactoe, 'f'.repeat(64), limits), (e: SandboxError) => e.kind === 'invalid');
 });

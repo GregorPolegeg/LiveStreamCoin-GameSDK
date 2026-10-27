@@ -1,0 +1,22 @@
+{
+  "name": "create-vibes-game",
+  "version": "0.1.0",
+  "private": true,
+  "description": "npx create-vibes-game my-game: a working VIBES DM game (tic-tac-toe in TypeScript) to start from.",
+  "bin": {
+    "create-vibes-game": "dist/index.js"
+  },
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "template"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json && node -e \"require('fs').chmodSync('dist/index.js', 0o755)\"",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  }
+}

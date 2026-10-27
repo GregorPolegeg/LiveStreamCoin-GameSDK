@@ -50,6 +50,16 @@ Rules for logic: no `Math.random`, `Date`, timers, `fetch` or Node APIs. Use `ct
 
 Full platform spec: `VIBES-DM-GAMES.md` (VIBES internal).
 
+## Make a game
+
+```bash
+npx create-vibes-game my-game
+cd my-game && npm install
+npm run dev        # all players side by side in the browser, live reload, "drop connection" per player
+npm run check      # the same automatic checks VIBES runs before review (determinism, purity, crashes, speed)
+npm test
+```
+
 ## Develop this repo
 
 ```bash
@@ -58,4 +68,4 @@ npm run build
 npm test
 ```
 
-Tests: `packages/runtime` (sandbox + multiplayer over real WebSockets), `packages/games` (the SDK against the runtime).
+Tests: `packages/runtime` (sandbox + multiplayer over real WebSockets), `packages/games` (the SDK against the runtime), `packages/cli` (build + check pass/fail).
