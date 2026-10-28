@@ -8,6 +8,7 @@
     "build": "vibes-games build",
     "check": "vibes-games check",
     "test": "vibes-games test",
+    "push": "vibes-games push",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

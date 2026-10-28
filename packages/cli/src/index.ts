@@ -6,6 +6,7 @@
  *   vibes-games build   dist/logic.js (+ sha256) and dist/client/
  *   vibes-games check   the automatic release checks (spec §9.1) that run locally
  *   vibes-games test    runs test/*.test.ts with node:test
+ *   vibes-games login / push / submit / status   publishing (publish.ts)
  */
 import { spawn } from 'child_process';
 import { parseArgs, intFlag, strFlag, type Args } from './args';
@@ -13,6 +14,7 @@ import { buildClient, buildLogic } from './build';
 import { check } from './check';
 import { dev } from './dev';
 import { loadProject } from './manifest';
+import { login, push, status, submit } from './publish';
 import { runTests } from './test-cmd';
 import { c, CliError, kb } from './util';
 
@@ -33,7 +35,15 @@ Commands
     --games <n>          fuzz games (default 200)
     --steps <n>          max steps per fuzz game (default 300)
   test                   Run test/*.test.ts with node:test
-  upload, submit, login  Publishing (not open yet)
+
+Publishing (portal: Applications → your app → Game)
+  login --token <token>  Once: the upload token from the portal
+  push                   Build, run the checks, upload: "Testing", only you see it under + → Games
+    --submit             also send it to review
+    --skip-check         upload without the checks (the reviewer sees they were skipped)
+    --app <id>           when you are logged in to more than one app
+  submit [version]       Send a tested version (default: the newest Testing one) to review
+  status                 Your versions and where they are
 
 Options
   --dir <path>           the game project (default: current folder)
@@ -94,12 +104,15 @@ async function main(args: Args): Promise<number> {
     }
     case 'test':
       return runTests(dir, args.positional);
-    case 'upload':
-    case 'submit':
     case 'login':
-      process.stderr.write(`vibes-games ${args.command}: publishing opens when the VIBES developer portal API is live.\n` +
-        `Until then: build with \`vibes-games build\`, run \`vibes-games check\`, and play it with \`vibes-games dev\`.\n`);
-      return 1;
+      return login(strFlag(args, 'token') ?? args.positional[0], strFlag(args, 'api'), dir);
+    case 'push':
+    case 'upload':
+      return push(dir, { submit: args.flags.submit === true, skipCheck: args.flags['skip-check'] === true, app: strFlag(args, 'app') });
+    case 'submit':
+      return submit(dir, args.positional[0], strFlag(args, 'app'));
+    case 'status':
+      return status(dir, strFlag(args, 'app'));
     case 'version':
       process.stdout.write(VERSION + '\n');
       return 0;
@@ -116,7 +129,7 @@ async function main(args: Args): Promise<number> {
 if (require.main === module) {
   const args = parseArgs(process.argv.slice(2));
   if (args.flags.help || args.flags.h) { process.stdout.write(HELP); process.exit(0); }
-  const sandboxed = ['build', 'check', 'dev'].includes(args.command ?? '');
+  const sandboxed = ['build', 'check', 'dev', 'push', 'upload'].includes(args.command ?? '');
   if (sandboxed && needsRespawn()) respawn();
   else {
     main(args).then((code) => process.exit(code), (e) => {

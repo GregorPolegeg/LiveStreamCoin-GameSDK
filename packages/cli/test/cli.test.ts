@@ -114,10 +114,11 @@ test('check: an invalid manifest fails', () => {
   assert.match(r.out, /unknown mode "ranked"/);
 });
 
-test('upload / submit / login are not open yet', () => {
-  for (const cmd of ['upload', 'submit', 'login']) {
-    const r = run(work, cmd);
-    assert.equal(r.code, 1);
-    assert.match(r.out, /publishing opens when the VIBES developer portal API is live/);
-  }
+test('publishing without a token says where to get one', () => {
+  const login = run(work, 'login');
+  assert.equal(login.code, 1);
+  assert.match(login.out, /login --token/);
+  const bad = run(work, 'login', '--token', 'not-a-token');
+  assert.equal(bad.code, 1);
+  assert.match(bad.out, /upload token/);
 });

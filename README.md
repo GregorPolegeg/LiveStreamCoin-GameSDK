@@ -60,6 +60,23 @@ npm run check      # the same automatic checks VIBES runs before review (determi
 npm test
 ```
 
+## Publish a game
+
+Like `butler push` on itch.io: one command uploads a build, and every upload is first a **Testing** version that only you see.
+
+1. In the portal: **Applications → New application** (your game's name), then the **Game** tab → **Make token**.
+   Add a logo, a hero image (16:9) and screenshots on the store page: that's what people see in the Games picker and on the game card.
+2. Once per machine: `npx vibes-games login --token <token>`
+3. In your game folder (bump `"version"` in package.json for every upload):
+   ```bash
+   npx vibes-games push          # build, run the checks, upload
+   ```
+   It's now under **+ → Games** in any of your chats, marked *Testing*. Start it, friends join from the card, play it for real.
+4. When it plays well: `npx vibes-games submit` (or `push --submit`). A VIBES admin plays it and approves it (or sends it back with a note).
+   Approved = live: new games use it, games already running keep their version. `npx vibes-games status` shows where every version is.
+
+No terminal? Drop the built folder (or a .zip) on the **Game** tab instead. Limits: 40 MB, 800 files, 8 MB a file, logic.js 2 MB.
+
 ## Develop this repo
 
 ```bash
