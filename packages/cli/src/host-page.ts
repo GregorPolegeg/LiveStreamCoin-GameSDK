@@ -55,7 +55,7 @@ export function hostPage(cfg: { name: string; modes: string[]; min: number; max:
 
   // The Context each iframe gets, exactly what the VIBES host gives a game.
   const contextFor = (p) => ({
-    sessionId: current.sessionId, dmId: 'dev-dm', mode: current.mode, flags: {},
+    sessionId: current.sessionId, dmId: 'dev-dm', mode: current.mode, flags: current.flags || {},
     me: { userId: p.userId, displayName: p.displayName }, role: 'player', platform: 'dev', locale: 'en', theme: 'dark',
     play: { url: 'ws://' + location.host + '/s/' + current.sessionId, token: p.token },
   });
@@ -72,6 +72,12 @@ export function hostPage(cfg: { name: string; modes: string[]; min: number; max:
       panel.net.textContent = 'connected to host';
     } else if (m.type === 'close') {
       panel.net.textContent = 'game closed';
+    } else if (m.type === 'rematch') {
+      // Like VIBES: the next game with the same players (and the flags the game asked for).
+      panel.net.textContent = 'rematch…';
+      fetch('/__dev/new?mode=' + current.mode + '&players=' + current.players.length, {
+        method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ flags: m.flags || {} }),
+      }).then((r) => r.json()).then((s) => { if (s.sessionId) { current = s; render(); } });
     }
   });
 

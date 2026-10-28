@@ -78,3 +78,9 @@ main { max-width: 440px; margin: 0 auto; padding: 12px 14px 16px; display: flex;
 .picks li.bad { border-color: #5b2323; }
 .picks .answer { font-size: 17px; font-weight: 800; justify-content: center; border-color: var(--good); background: #12351f; }
 .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); z-index: 7; padding: 9px 16px; border-radius: 99px; background: #33364a; font-weight: 600; }
+
+.end-actions { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; }
+.end-actions button { height: 46px; border-radius: 999px; border: 0; font: 800 15px system-ui, sans-serif; cursor: pointer; }
+.again { background: var(--accent); color: #140f24; }
+.new-settings { background: var(--panel2); color: var(--text); font-weight: 650 !important; }
+.end-actions button:disabled { opacity: 0.5; }

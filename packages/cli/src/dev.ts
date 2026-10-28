@@ -22,7 +22,7 @@ import { c, CliError } from './util';
 
 export interface DevOptions { players?: number; port: number; host: string; verbose?: boolean }
 
-interface Current { sessionId: string; mode: Mode; players: { userId: string; displayName: string; token: string }[] }
+interface Current { sessionId: string; mode: Mode; flags: Record<string, unknown>; players: { userId: string; displayName: string; token: string }[] }
 
 const TYPES: Record<string, string> = {
   '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.mjs': 'text/javascript; charset=utf-8',
@@ -119,12 +119,12 @@ export async function dev(dir: string, opts: DevOptions): Promise<{ close(): Pro
 
   // ---------- sessions ----------
 
-  const newSession = (mode: Mode, n: number): Current => {
+  const newSession = (mode: Mode, n: number, flags: Record<string, unknown> = {}): Current => {
     if (!logic) throw new CliError(buildError() ?? 'the logic is not built');
     const id = `dev-${++counter}-${randomBytes(3).toString('hex')}`;
     const names = PLAYER_NAMES.slice(0, n);
     const cfg: SessionConfig = {
-      id, appId: project.manifest.slug, versionId: 'dev', dmId: 'dev-dm', mode, flags: {},
+      id, appId: project.manifest.slug, versionId: 'dev', dmId: 'dev-dm', mode, flags,
       seed: randomBytes(16).toString('hex'),
       players: names.map((userId, seat) => ({ userId, seat, displayName: cap(userId) })),
       spectators: false, logic: { code: logic.code, sha256: logic.sha256 },
@@ -135,7 +135,7 @@ export async function dev(dir: string, opts: DevOptions): Promise<{ close(): Pro
     };
     registry.add(cfg);
     current = {
-      sessionId: id, mode,
+      sessionId: id, mode, flags,
       players: names.map((userId) => ({ userId, displayName: cap(userId), token: devToken({ sessionId: id, userId, appId: cfg.appId, role: 'player' }) })),
     };
     playerCount = n;
@@ -179,7 +179,15 @@ export async function dev(dir: string, opts: DevOptions): Promise<{ close(): Pro
       const mode = (url.searchParams.get('mode') ?? current?.mode ?? project.manifest.modes[0]) as Mode;
       if (!project.manifest.modes.includes(mode)) return json(400, { error: `mode ${mode} is not in vibes.json` });
       const n = clamp(Number(url.searchParams.get('players') ?? playerCount) || playerCount);
-      try { return json(200, newSession(mode, n)); } catch (e) { return json(409, { error: (e as Error).message }); }
+      // a rematch from the game sends its start options as JSON
+      let body = '';
+      req.on('data', (c) => { body += c; if (body.length > 4096) req.destroy(); });
+      req.on('end', () => {
+        let flags: Record<string, unknown> = {};
+        try { const f = body ? JSON.parse(body).flags : undefined; if (f && typeof f === 'object' && !Array.isArray(f)) flags = f; } catch { /* none */ }
+        try { json(200, newSession(mode, n, flags)); } catch (e) { json(409, { error: (e as Error).message }); }
+      });
+      return;
     }
     if (path === '/__dev/drop' && req.method === 'POST') {
       const ses = url.searchParams.get('ses') ?? '';

@@ -102,6 +102,12 @@ export interface Game<G> {
   readonly time: { now(): number };
   /** Leave the game (closes the socket and tells the host). */
   close(): void;
+  /**
+   * After the game ended: ask the host for the next game with the same players ("Play again").
+   * VIBES starts it right away and moves everyone who asks into it. `flags` replaces the start
+   * options (e.g. the settings just played, so the next game skips its own lobby).
+   */
+  rematch(flags?: Record<string, unknown>): void;
 }
 
 export const HOST_ORIGINS = ['https://vibes.stream', 'https://www.vibes.stream'];
@@ -330,6 +336,10 @@ class Client<G> implements Game<G> {
     this.ws = null;
     this.stopPing();
     ws?.close(1000, 'bye');
+  }
+
+  rematch(flags?: Record<string, unknown>) {
+    this.toHost({ type: 'rematch', ...(flags && typeof flags === 'object' ? { flags } : {}) });
   }
 
   close() {

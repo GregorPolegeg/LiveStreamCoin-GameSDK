@@ -300,11 +300,24 @@ function render(c: Change<View>) {
       const medal = ['🥇', '🥈', '🥉'][place - 1] ?? `#${place}`;
       return `<li class="${id === me ? 'me' : ''}"><span class="place">${medal}</span><span>${esc(playerName(c.players, id, me))}<br><small>${s.right[id] ?? 0} / ${s.settings.rounds} right</small></span><b>${s.scores[id] ?? 0}</b></li>`;
     }).join('');
+    el('end-actions').hidden = c.status !== 'COMPLETED' || !(me in s.scores);
     el('end').hidden = false;
   } else {
     el('end').hidden = true;
   }
 }
+
+// After the end: the next game with the same players. VIBES starts it right away and moves everyone who taps here
+// into it. Play again keeps the settings and skips the lobby; New settings opens the lobby with them filled in.
+function again(skipLobby: boolean) {
+  const s = last?.state;
+  if (!s) return;
+  el<HTMLButtonElement>('again').disabled = el<HTMLButtonElement>('new-settings').disabled = true;
+  vibes.rematch({ ...s.settings, ...(skipLobby ? { lobby: false } : {}) });
+  setTimeout(() => { el<HTMLButtonElement>('again').disabled = el<HTMLButtonElement>('new-settings').disabled = false; }, 4000);
+}
+el('again').onclick = () => again(true);
+el('new-settings').onclick = () => again(false);
 
 let toastTimer: ReturnType<typeof setTimeout> | undefined;
 function toast(text: string) {
