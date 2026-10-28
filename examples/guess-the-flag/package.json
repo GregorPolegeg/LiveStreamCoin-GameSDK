@@ -1,6 +1,6 @@
 {
   "name": "guess-the-flag",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Guess the Flag for VIBES DMs and group chats.",
   "scripts": {

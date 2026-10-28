@@ -1,0 +1,8 @@
+{
+  "name": "Poker",
+  "slug": "poker",
+  "players": { "min": 1, "max": 9 },
+  "modes": ["friendly", "practice"],
+  "client": { "entry": "client/main.ts" },
+  "realtime": { "reconnectGraceSec": 60, "maxDurationMin": 180 }
+}

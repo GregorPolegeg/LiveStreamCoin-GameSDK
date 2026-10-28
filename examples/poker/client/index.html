@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Poker</title>
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="A-H" viewBox="0 0 100 100"><path d="M50 88C24 69 8 54 8 34 8 20 18 10 31 10c8 0 15 4 19 11 4-7 11-11 19-11 13 0 23 10 23 24 0 20-16 35-42 54z" fill="currentColor" stroke="currentColor" stroke-width="12" stroke-linejoin="round" transform="translate(9 9) scale(.82)"/></symbol><symbol id="A-D" viewBox="0 0 100 100"><path d="M50 6L86 50 50 94 14 50z" fill="currentColor" stroke="currentColor" stroke-width="12" stroke-linejoin="round" transform="translate(9 9) scale(.82)"/></symbol><symbol id="A-S" viewBox="0 0 100 100"><path d="M50 8C62 26 90 39 90 60c0 12-9 20-20 20-7 0-13-3-16-8 1 8 4 14 9 19H37c5-5 8-11 9-19-3 5-9 8-16 8-11 0-20-8-20-20 0-21 28-34 40-52z" fill="currentColor" stroke="currentColor" stroke-width="12" stroke-linejoin="round" transform="translate(9 9) scale(.82)"/></symbol><symbol id="A-C" viewBox="0 0 100 100"><g fill="currentColor" stroke="currentColor" stroke-width="12" stroke-linejoin="round" transform="translate(9 9) scale(.82)"><circle cx="50" cy="29" r="19"/><circle cx="28" cy="57" r="19"/><circle cx="72" cy="57" r="19"/><path d="M45 50c0 21-3 32-10 41h30c-7-9-10-20-10-41z"/></g></symbol><symbol id="C-H" viewBox="0 0 100 100"><g fill="currentColor"><circle cx="33" cy="36" r="20"/><circle cx="67" cy="36" r="20"/><path d="M14 43h72L50 86z"/></g></symbol><symbol id="C-D" viewBox="0 0 100 100"><rect x="22" y="22" width="56" height="56" rx="4" fill="currentColor" transform="rotate(45 50 50)"/></symbol><symbol id="C-S" viewBox="0 0 100 100"><g fill="currentColor"><circle cx="33" cy="58" r="18"/><circle cx="67" cy="58" r="18"/><path d="M50 10L86 54H14z"/><path d="M50 58L64 92H36z"/></g></symbol><symbol id="C-C" viewBox="0 0 100 100"><g fill="currentColor"><circle cx="50" cy="29" r="18"/><circle cx="29" cy="59" r="18"/><circle cx="71" cy="59" r="18"/><path d="M50 50L64 92H36z"/></g></symbol><symbol id="vlogo" viewBox="11 96 1001 1000"><defs><linearGradient id="vg" x1="816" y1="124" x2="82" y2="858" gradientUnits="userSpaceOnUse"><stop stop-color="#00CEE5"/><stop offset="1" stop-color="#00A0E5"/></linearGradient></defs><path fill-rule="evenodd" fill="url(#vg)" d="M511.579 1096C787.721 1096 1011.58 872.142 1011.58 596C1011.58 319.858 787.721 96 511.579 96C235.436 96 11.5786 319.858 11.5786 596C11.5786 872.142 235.436 1096 511.579 1096ZM263.075 684.932L146.624 447.768L146.983 446.887C148.8 442.45 150.695 438.054 152.667 433.7C184.203 364.07 235.407 305.248 299.189 264.32L456.067 590.249C478.843 636.674 545.021 636.674 567.798 590.249L723.968 264.32C792.003 307.976 845.725 371.993 876.533 447.768L760.789 684.932C659.33 891.735 364.534 891.735 263.075 684.932Z"/></symbol></svg>
+<div class="conn" id="conn" hidden>Reconnecting…</div>
+
+<!-- ======== LOBBY: the host sets the table up, everyone sees it live ======== -->
+<section id="lobby" class="screen">
+  <div class="lob" id="lob">
+    <h1><span class="chip3"></span>Poker</h1>
+    <p class="sub">Texas Hold'em · play chips only, no real money</p>
+    <div class="sec"><h3>Starting chips</h3><div class="chips" id="o-chips"></div></div>
+    <div class="sec">
+      <h3>Blinds</h3>
+      <div class="chips" id="o-blinds"></div>
+      <p class="hint" style="margin-top:12px">Blinds go up</p>
+      <div class="chips" id="o-up" style="margin-top:6px"></div>
+    </div>
+    <div class="sec"><h3>When someone runs out of chips</h3><div class="opt" id="o-rebuy"></div><p class="hint" id="rebuy-hint"></p></div>
+    <div class="sec"><h3>Time to act</h3><div class="chips" id="o-timer"></div></div>
+    <div class="sec"><h3>Bots in the empty seats</h3><div class="chips" id="o-bots"></div><p class="hint" id="bots-hint"></p></div>
+    <div class="sec local"><h3>Cards</h3><div class="chips" id="o-deck"></div><p class="hint" style="margin-top:10px">Only for you: everyone picks their own.</p></div>
+    <div class="sec local"><h3>At the table · <span id="seated"></span></h3><div class="seats" id="lob-seats"></div><p class="hint" id="host-hint"></p></div>
+  </div>
+  <div class="lobby-cta"><button class="pill pri" id="start">Deal the first hand</button></div>
+</section>
+
+<!-- ======== TABLE ======== -->
+<section id="table" class="screen">
+  <div class="top">
+    <div class="t"><b>Poker</b><div id="sub">Hand 1</div></div>
+    <span class="lvl" id="lvl">Blinds 10/20</span>
+    <button class="end" id="end" hidden>End game</button>
+  </div>
+  <div class="play" id="wrap">
+    <div class="rail" id="rail"></div>
+    <div class="opps" id="seats"></div>
+    <div class="bt" id="mybt" hidden></div>
+    <div class="center">
+      <div class="pot" id="pot"><span id="potc"></span><div><small>Pot</small><span id="potv">0</span></div></div>
+      <div class="board" id="board"></div>
+      <div class="banner" id="banner"><b id="bn-t"></b><span id="bn-s"></span></div>
+    </div>
+  </div>
+  <div class="me" id="me">
+    <div class="mine" id="mine"><span class="d" id="mydealer">D</span><div class="hand" id="myhand"></div><div class="info"><b>You</b><div class="srow"><span class="pile" id="mypile"></span><div class="stack" id="mystack">0</div></div><div class="strength" id="strength"></div></div><div class="mybet" id="mybet"></div><div class="bar" id="mybar"></div></div>
+    <div class="raise" id="raise">
+      <div class="seg" id="seg"><button data-f=".5">½ pot</button><button data-f="1">Pot</button><button data-f="2">2× pot</button><button data-f="all">All-in</button></div>
+      <div class="amtrow"><button class="step" id="minus">−</button><div class="big"><b id="ramt"></b><span id="rinfo"></span></div><button class="step" id="plus">+</button></div>
+      <input type="range" id="slider" min="0" max="100" step="1">
+      <div class="ends"><span id="rmin"></span><span id="rmax"></span></div>
+    </div>
+    <div class="actions" id="actions">
+      <button class="act fold" id="a-fold"><span class="k">✕ Fold</span></button>
+      <button class="act call" id="a-call"><span class="k">Check</span></button>
+      <button class="act bet" id="a-raise"><span class="k">Raise</span></button>
+    </div>
+    <div class="waiting" id="waiting" style="display:none"></div>
+  </div>
+  <div class="bust" id="bust"><div class="box"><h2>You're out of chips</h2><p id="bust-p"></p><button class="pill pri" id="rebuy">Rebuy</button><button class="pill" id="watch">Watch</button><span class="count" id="bust-t"></span></div></div>
+  <div class="over" id="over"><div class="box"><h2 id="over-t"></h2><p id="over-s"></p><ol id="over-list"></ol><button class="pill pri" id="again">↻ Play again</button><button class="pill" id="new-settings">New settings</button></div></div>
+</section>
+<div class="toast" id="toast" hidden></div>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
