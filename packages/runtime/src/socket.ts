@@ -89,10 +89,16 @@ export function handleSocket(ws: WebSocket, sessionId: string, opts: SocketOptio
         return ws.close(1011, 'unavailable');
       }
       if (!session || session.cfg.appId !== claims.appId) return ws.close(4004, 'unknown_session');
-      if (claims.role === 'player' && !session.isPlayer(claims.userId)) return ws.close(4003, 'not_a_player');
-      if (claims.role === 'spectator' && !session.cfg.spectators) return ws.close(4003, 'no_spectators');
+      // A "player" token from someone not in this game (they joined in VIBES just after it was set up):
+      // they watch when the game allows it, and VIBES puts them in the next game.
+      let role = claims.role;
+      if (role === 'player' && !session.isPlayer(claims.userId)) {
+        if (!session.cfg.spectators) return ws.close(4003, 'not_a_player');
+        role = 'spectator';
+      }
+      if (role === 'spectator' && !session.cfg.spectators) return ws.close(4003, 'no_spectators');
       if (ws.readyState !== WebSocket.OPEN) return;
-      conn = { userId: claims.userId, role: claims.role, send, close: (code, reason) => ws.close(code, reason) };
+      conn = { userId: claims.userId, role, send, close: (code, reason) => ws.close(code, reason) };
       const resume = Number.isInteger(f.resume) && (f.resume as number) >= 0 ? (f.resume as number) : null;
       await session.attach(conn, resume);
       return;
