@@ -65,7 +65,8 @@ export default defineGame({
   gameOver(state) {
     if (state.phase !== 'done') return null;
     const rows = placements(state);
-    if (!rows.length) return { draw: true };
+    // nobody real at the table, or everyone ended level: a draw (like Guess the Flag)
+    if (!rows.length || (rows.length > 1 && rows.every((r) => r.place === 1))) return { draw: true };
     // rest: 1 because every player is listed (VIB-215)
     return { placements: rows, rest: 1 };
   },

@@ -205,4 +205,9 @@ test('host ends the game: chips in the middle go back', () => {
   call(s, 'end', null, 'a');
   assert.equal(s.phase, 'done');
   assert.equal(s.seats.reduce((n, p) => n + p.stack, 0), 3000);
+  // everyone level (nobody won a hand yet, blinds went back): a draw
+  const level = setup(['x', 'y'], { bots: 0, lobby: false, chips: 1000 });
+  run(level, (z) => z.turn >= 0);
+  call(level, 'end', null, 'x');
+  assert.deepEqual(game.gameOver!(level, ctx()), { draw: true });
 });
